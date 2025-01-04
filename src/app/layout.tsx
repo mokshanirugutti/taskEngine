@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${DancingScript.variable} ${delius.variable}`}
+        className={`${inter.variable} ${DancingScript.variable} ${delius.variable} relative` }
       >
              <ThemeProvider
             attribute="class"
