@@ -1,8 +1,14 @@
+"use client"
+
 import Link from "next/link";
 import ThemeToggle from "./theme-toggle";
 import { Button } from "./ui/button";
+import { usePathname } from "next/navigation";
+
 
 export default function Header() {
+  const pathname = usePathname();
+  const signup = pathname === '/signup';
   return (
     <header>
       <div className="px-4 sm:px-6 ">
@@ -16,10 +22,15 @@ export default function Header() {
             <h1 className="font-semibold tracking-wide"> TaskEngine</h1>
           </Link>
           <div className="flex items-center gap-2">
-            <Button variant="outline" 
-              className="hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition duration-300 ease-in-out ">
-              Log in
-            </Button>
+
+            {!signup && <Link 
+              href="/signup"
+            >
+              <Button variant="outline" 
+                className="hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition duration-300 ease-in-out ">
+                Sign Up
+              </Button>
+            </Link>            }
             <ThemeToggle />
           </div>
         </div>
