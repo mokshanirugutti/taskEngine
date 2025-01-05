@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const pathname = usePathname();
-  const signup = pathname === '/signup';
+  const signup = pathname === '/signup' || pathname === '/signin';
   return (
     <header>
       <div className="px-4 sm:px-6 ">
@@ -24,11 +24,11 @@ export default function Header() {
           <div className="flex items-center gap-2">
 
             {!signup && <Link 
-              href="/signup"
+              href="/signin"
             >
               <Button variant="outline" 
                 className="hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition duration-300 ease-in-out ">
-                Sign Up
+                Sign In
               </Button>
             </Link>            }
             <ThemeToggle />
