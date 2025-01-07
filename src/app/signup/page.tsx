@@ -10,19 +10,19 @@ import { Toaster, toast } from "sonner";
 
 export default function Signup() {
     const router = useRouter();
-  const usernameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<null | string>(null);
 
 
   const handleSignup = async () => {
     // console.log("handleSignup function called");
-    const username = usernameRef.current?.value || "";
+    const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
     // console.log("called singup")
     try {
       // console.log("before axios post")
-      const response = await axios.post("http://localhost:3000/api/signup", { username, password });
+      const response = await axios.post("http://localhost:3000/api/signup", { email, password });
 //       console.log('Full response:', response);
 // console.log('Response Data:', response.data);
 
@@ -53,8 +53,8 @@ export default function Signup() {
         <div className="flex flex-col gap-3">
           <input
             type="text"
-            placeholder="username"
-            ref={usernameRef}
+            placeholder="email"
+            ref={emailRef}
             className="px-3 py-1 rounded-md"
           />
           <input

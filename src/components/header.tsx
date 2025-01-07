@@ -3,12 +3,11 @@
 import Link from "next/link";
 import ThemeToggle from "./theme-toggle";
 import { Button } from "./ui/button";
-import { usePathname } from "next/navigation";
-
-
+import { useSession, signOut } from "next-auth/react";
 export default function Header() {
-  const pathname = usePathname();
-  const signup = pathname === '/signup' || pathname === '/signin';
+  const { data: session } = useSession();
+
+
   return (
     <header>
       <div className="px-4 sm:px-6 ">
@@ -21,16 +20,23 @@ export default function Header() {
             <span className="sr-only">Task Engine</span>
             <h1 className="font-semibold tracking-wide"> TaskEngine</h1>
           </Link>
+          
           <div className="flex items-center gap-2">
-
-            {!signup && <Link 
-              href="/signin"
-            >
+            {session ? (
               <Button variant="outline" 
-                className="hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition duration-300 ease-in-out ">
-                Sign In
+                className="hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition duration-300 ease-in-out"
+                onClick={() => signOut()}
+              >
+                Logout
               </Button>
-            </Link>            }
+            ) : (
+              <Link href="/signin">
+                <Button variant="outline" 
+                  className="hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition duration-300 ease-in-out">
+                  Sign In
+                </Button>
+              </Link>
+            )}
             <ThemeToggle />
           </div>
         </div>

@@ -1,25 +1,26 @@
-"use client";
-
+"use client"
 import axios from "axios";
-import { useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/Buttons/LoadingButton";
 import { Toaster, toast } from "sonner";
 import Link from "next/link";
 
-export default function Signin() {
+export default  function Signin() {
+  
+
   const router = useRouter();
-  const usernameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<null | string>(null);
 
   const handleSignin = async () => {
-    const username = usernameRef.current?.value || "";
+    const email = emailRef.current?.value || "";
     const password = passwordRef.current?.value || "";
 
     try {
       const response = await axios.post("http://localhost:3000/api/signin", {
-        username,
+        email,
         password,
       });
       const res = response.data;
@@ -44,8 +45,8 @@ export default function Signin() {
       <div className="flex flex-col gap-3">
         <input
           type="text"
-          placeholder="username"
-          ref={usernameRef}
+          placeholder="email"
+          ref={emailRef}
           className="px-3 py-1 rounded-md"
           required
         />

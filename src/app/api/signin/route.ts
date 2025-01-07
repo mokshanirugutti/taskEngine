@@ -1,26 +1,27 @@
-import { PrismaClient } from "@prisma/client";
+import { connectMongoDB } from "@/db/mongodb";
+import User from "@/db/models/user";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-const prismaClient = new PrismaClient();
+
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 export async function POST(req: NextRequest) {
   try {
+    console.log('📍 Signin Request Started');
+    
+    await connectMongoDB();
     const data = await req.json();
-    // console.log(data);
+    console.log(' Login attempt for email:', data.email);
 
-    // Find the user by username
-    const user = await prismaClient.user.findFirst({
-      where: { username: data.username },
-    });
+    const user = await User.findOne({ email: data.email });
 
     if (!user) {
+      console.log('❌ User not found:', data.email);
       return NextResponse.json({ success: false, message: "User not found" });
     }
 
-    // Compare the entered password with the hashed password in the database
     const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
     if (!isPasswordValid) {
@@ -29,18 +30,27 @@ export async function POST(req: NextRequest) {
 
     // Generate JWT token
     const token = jwt.sign(
-      { id: user.id, username: user.username },
+      { id: user.id, email: user.email },
       JWT_SECRET,
       { expiresIn: "1h" }
     );
 
-    return NextResponse.json({
+    const response =  NextResponse.json({
       success: true,
       message: "User found and authenticated",
-      data: { user: { id: user.id, username: user.username }, token },
     });
+
+    response.cookies.set("authToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 3600, // 1 hour
+      path: "/",
+    });
+
+    return response;
+    
   } catch (error) {
-    console.error("Error logging in:", error);
+    console.error("Signin Error:", error);
     return NextResponse.json(
       {
         success: false,

@@ -3,6 +3,7 @@ import {  Inter, Dancing_Script, Delius } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
+import { AuthProvider } from "./Providers";
 
 const inter = Inter({
   variable: "--font-Inter",
@@ -39,8 +40,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Header/>            
-            {children}
+            <AuthProvider>
+              <Header/>            
+              {children}
+            </AuthProvider>
+            
           </ThemeProvider>
       </body>
     </html>
